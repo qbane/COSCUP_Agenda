@@ -12,6 +12,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="COSCUP 2022">
+  <link rel="shortcut icon" href="coscup.jpg">
   <link rel="apple-touch-icon" href="coscup.jpg">
   <link rel="apple-touch-icon" sizes="152x152" href="coscup.jpg">
   <link rel="apple-touch-icon" sizes="180x180" href="coscup.jpg">
@@ -113,6 +114,10 @@
       text-align: center;
       color: white;
       margin-top: 20pt;
+
+      position: sticky;
+      /* FIXME: approximated */
+      top: calc(20pt + 1.15rem);
     }
 
     .talk {
@@ -132,6 +137,11 @@
       font-weight: bold;
     }
 
+    .talk-permalink {
+      text-decoration: none;
+      float: right;
+    }
+
     .talk-title {
       font-weight: bold;
     }
@@ -145,8 +155,9 @@
       font-size: 9pt;
       margin: 4pt 0;
       display: -webkit-box;
-      -webkit-line-clamp: 1;
+      -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
+      line-height: 1.35;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -199,6 +210,14 @@
       display: block;
       word-break: break-word;
       hyphens: auto;
+    }
+
+    .talk .talk-intro br {
+      display: none;
+    }
+
+    .talk.display-details .talk-intro br {
+      display: initial;
     }
 
     .talk.starred {
@@ -325,6 +344,7 @@
           <span class="talk-tags" v-if="talk.tags.length">
             <span class="talk-tag" v-for="tag in talk.tags">{{ tag }}</span>
           </span>
+          <a class="talk-permalink" v-bind:href="talk.uri" target="_blank" v-on:mouseup.stop>🌐</a>
         </div>
         <div style="margin:3pt 0;" v-if="!talk.expire"></div>
         <span class="talk-title">{{ talk.zh.title }}</span>
@@ -332,13 +352,13 @@
           ({{ talk.speakers.map(speakerId => speakersById[speakerId]).map(s => s.zh.name).join(', ') }})
         </span>
         <div class="talk-intro" v-if="talk.zh.description">
-          {{ talk.zh.description }}
+          <span v-html="talk.zh.description.replace(/(\r?\n)+/g, '&lt;br>')"></span>
         </div>
         <div class="talk-speaker-intros">
           <div class="talk-speaker-intro"
             v-for="speaker in talk.speakers.map(speakerId => speakersById[speakerId]).filter(s => s)"
             v-if="speaker.zh.bio">
-            {{ speaker.zh.name }}  ▸ {{ speaker.zh.bio }}
+            {{ speaker.zh.name }}  ▸ <span v-html="speaker.zh.bio.replace(/(\r?\n)+/g, '&lt;br>')"></span>
           </div>
         </div>
       </div>
@@ -356,7 +376,7 @@
     &nbsp;|&nbsp;
     <a onclick="purgeOfflineData()">清理離線資料 🗑</a>
     <div style="margin-top:4pt;color:hsl(0, 0%, 80%);font-family:monospace;">
-      v20220724r1 fork of @qbane
+      <a style="color: hsl(240, 90%, 64%);" href="https://github.com/qbane/COSCUP_Agenda" target="_blank">v20220724r2</a> fork of @qbane
     </div>
   </div>
 </footer>

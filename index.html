@@ -373,10 +373,10 @@
             {{ speaker.zh.name }}  ▸ <span v-html="speaker.zh.bio.replace(/(\r?\n)+/g, '&lt;br>')"></span>
           </div>
           <div class="talk-meta-links">
-            <a v-on:mouseup.stop v-if="talk.co_write" v-bind:href="talk.co_write">⧉共筆</a>
-            <a v-on:mouseup.stop v-if="talk.qa" v-bind:href="talk.qa">⧉Q & A</a>
-            <a v-on:mouseup.stop v-if="talk.slide" v-bind:href="talk.slide">⧉投影片</a>
-            <a v-on:mouseup.stop v-if="talk.record" v-bind:href="talk.record">⧉記錄</a>
+            <a v-on:mouseup.stop v-if="talk.co_write" target="_blank" v-bind:href="talk.co_write">⧉共筆</a>
+            <a v-on:mouseup.stop v-if="talk.qa" target="_blank" v-bind:href="talk.qa">⧉Q & A</a>
+            <a v-on:mouseup.stop v-if="talk.slide" target="_blank" v-bind:href="talk.slide">⧉投影片</a>
+            <a v-on:mouseup.stop v-if="talk.record" target="_blank" v-bind:href="talk.record">⧉記錄</a>
           </div>
         </div>
       </div>
@@ -394,7 +394,7 @@
     &nbsp;|&nbsp;
     <a onclick="purgeOfflineData()">清理離線資料 🗑</a>
     <div style="margin-top:4pt;color:hsl(0, 0%, 80%);font-family:monospace;">
-      <a style="color: hsl(240, 90%, 64%);" href="https://github.com/qbane/COSCUP_Agenda" target="_blank">v20220730r3</a> fork of @qbane
+      <a style="color: hsl(240, 90%, 64%);" href="https://github.com/qbane/COSCUP_Agenda" target="_blank">v20220730r4</a> fork of @qbane
     </div>
   </div>
 </footer>

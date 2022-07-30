@@ -196,6 +196,18 @@
       margin-left: 3pt;
     }
 
+    .talk-meta-links {
+      display: flex;
+      font-size: .9em;
+      gap: .75em;
+      justify-content: flex-end;
+    }
+
+    .talk-meta-links a {
+      text-decoration: none;
+      color:  hsl(165, 30%, 40%);
+    }
+
     .talk.expired {
       opacity: 0.3;
       filter: grayscale(100%);
@@ -338,7 +350,7 @@
         v-on:mouseup.stop="toggleTalkDetails"
         v-swipeleft.stop="toggleTalkStarred"
         v-bind:data-talk-id="talk.id">
-        <div style="white-space:nowrap;overflow-x:hidden">
+        <div style="white-space:nowrap;overflow:hidden">
           <span class="talk-time">{{ talk.beginMoment.format('HH:mm') }}–{{ talk.endMoment.format('HH:mm') }}</span>
           <span class="talk-type" v-if="talk.type.length">{{ talk.type[0] }}</span>
           <span class="talk-tags" v-if="talk.tags.length">
@@ -360,6 +372,12 @@
             v-if="speaker.zh.bio">
             {{ speaker.zh.name }}  ▸ <span v-html="speaker.zh.bio.replace(/(\r?\n)+/g, '&lt;br>')"></span>
           </div>
+          <div class="talk-meta-links">
+            <a v-on:mouseup.stop v-if="talk.co_write" v-bind:href="talk.co_write">⧉共筆</a>
+            <a v-on:mouseup.stop v-if="talk.qa" v-bind:href="talk.qa">⧉Q & A</a>
+            <a v-on:mouseup.stop v-if="talk.slide" v-bind:href="talk.slide">⧉投影片</a>
+            <a v-on:mouseup.stop v-if="talk.record" v-bind:href="talk.record">⧉記錄</a>
+          </div>
         </div>
       </div>
     </div>
@@ -376,7 +394,7 @@
     &nbsp;|&nbsp;
     <a onclick="purgeOfflineData()">清理離線資料 🗑</a>
     <div style="margin-top:4pt;color:hsl(0, 0%, 80%);font-family:monospace;">
-      <a style="color: hsl(240, 90%, 64%);" href="https://github.com/qbane/COSCUP_Agenda" target="_blank">v20220724r2</a> fork of @qbane
+      <a style="color: hsl(240, 90%, 64%);" href="https://github.com/qbane/COSCUP_Agenda" target="_blank">v20220730r3</a> fork of @qbane
     </div>
   </div>
 </footer>

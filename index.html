@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>COSCUP 2022</title>
+  <title>COSCUP 2023</title>
 
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -11,16 +11,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="COSCUP 2022">
+  <meta name="apple-mobile-web-app-title" content="COSCUP 2023">
   <link rel="shortcut icon" href="coscup.jpg">
   <link rel="apple-touch-icon" href="coscup.jpg">
   <link rel="apple-touch-icon" sizes="152x152" href="coscup.jpg">
   <link rel="apple-touch-icon" sizes="180x180" href="coscup.jpg">
   <link rel="apple-touch-icon" sizes="167x167" href="coscup.jpg">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment-with-locales.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css">
   <link rel="manifest" type="application/manifest+json" href="manifest.webmanifest">
   <style>
@@ -309,13 +308,13 @@
 <body>
 
 <header>
-  <h1>COSCUP 2022 ▸ 下一場聽什麼？</h1>
+  <h1>COSCUP 2023 ▸ 下一場聽什麼？</h1>
 </header>
 
 <div id="agenda">
   <nav>
-    <a href="#20220730" v-bind:class="{ active: (today == '20220730') }">D1</a>
-    <a href="#20220731" v-bind:class="{ active: (today == '20220731') }">D2</a>
+    <a href="#20230729" v-bind:class="{ active: (today == '20230729') }">D1</a>
+    <a href="#20230730" v-bind:class="{ active: (today == '20230730') }">D2</a>
     <a v-on:click.prevent="toggleNextOnly" v-bind:class="{ active: nextOnly }">找</a>
     <a v-on:click.prevent="toggleStarredOnly" v-bind:class="{ active: starredOnly }">星</a>
     <a v-on:click.prevent="toggleTimeMachine" v-bind:class="{ active: timeMachine }">跳</a>
@@ -394,12 +393,12 @@
     &nbsp;|&nbsp;
     <a onclick="purgeOfflineData()">清理離線資料 🗑</a>
     <div style="margin-top:4pt;color:hsl(0, 0%, 80%);font-family:monospace;">
-      <a style="color: hsl(240, 90%, 64%);" href="https://github.com/qbane/COSCUP_Agenda" target="_blank">v20220730r4</a> fork of @qbane
+      <a style="color: hsl(240, 90%, 64%);" href="https://github.com/qbane/COSCUP_Agenda" target="_blank">v20230724r1</a> fork of @qbane
     </div>
   </div>
 </footer>
 
-<script type="text/babel">
+<script>
   Vue.directive('swipeleft', {
     bind: function(el, binding, vnode) {
       let startX, startPageTop, originLeft, starredYet;
@@ -591,7 +590,7 @@
       };
     }).filter(t => t.talks.length);
 
-    // COSCUP 2022
+    // COSCUP 2023
     const sortedRoomIds = [
       'RB105', 'AU101',
       'TR209', 'TR211', 'TR212', 'TR213', 'TR214',
@@ -629,7 +628,7 @@
     updateTracks(window.programs);
   }
 
-  const programsUri = 'https://coscup.org/2022/json/session.json';
+  const programsUri = 'https://coscup.org/2023/json/session.json';
 
   let hashChangeEvt = undefined;
   let refreshInterval = undefined;
@@ -663,7 +662,7 @@
   }
 
   if (!window.location.hash) {
-    window.location.hash = '#20220730';
+    window.location.hash = '#20230729';
   }
 
   if (window.navigator.serviceWorker) {

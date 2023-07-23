@@ -5,12 +5,12 @@ this.addEventListener('install', evt => {
   console.log('installed');
   evt.waitUntil(
     caches.open(cacheKey).then(cache => {
-      return cache.addAll([
-        '.',
-        'manifest.webmanifest',
-        'index.html',
-        'coscup.jpg',
-      ]);
+      // return cache.addAll([
+      //   '.',
+      //   'manifest.webmanifest',
+      //   'index.html',
+      //   'coscup.jpg',
+      // ]);
     }));
 });
 

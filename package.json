@@ -1,0 +1,26 @@
+{
+  "name": "coscup-agenda",
+  "version": "0.0.1",
+  "description": "COSCUP Agenda modernized",
+  "private": true,
+  "main": "script.js",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qbane/COSCUP_Agenda.git"
+  },
+  "keywords": [
+    "coscup"
+  ],
+  "author": "qbane",
+  "license": "UNLICENSED",
+  "homepage": "https://coscup.qbane.me",
+  "devDependencies": {
+    "vite": "^4.4.6",
+    "@vitejs/plugin-vue2": "^2.2.0",
+    "vue": "^2.7.14"
+  }
+}

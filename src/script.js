@@ -161,7 +161,7 @@ export const agendaView = new Vue({
 agendaView.$mount(document.getElementById('app'))
 
 
-const programsUri = 'https://coscup.org/2023/json/session.json';
+const programsUri = `https://coscup.org/${import.meta.env.COSCUP_AGENDA_YEAR}/json/session.json`;
 
 let hashChangeEvt = undefined;
 let refreshInterval = undefined;
@@ -195,7 +195,7 @@ else {
 }
 
 if (!window.location.hash) {
-  window.location.hash = '#20230729';
+  window.location.hash = import.meta.env.COSCUP_AGENDA_DATE_D1;
 }
 
 if (process.env.NODE_ENV !== 'development') {

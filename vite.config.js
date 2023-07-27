@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue2'
-import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig(async ({ mode }) => {
   return {
@@ -14,8 +13,8 @@ export default defineConfig(async ({ mode }) => {
           },
         },
       }),
-      VitePWA(),
     ],
+    envPrefix: 'COSCUP_AGENDA_',
     clearScreen: false,
   }
 })

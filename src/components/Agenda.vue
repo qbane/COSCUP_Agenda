@@ -1,13 +1,14 @@
 <script setup>
   const console = globalThis.console
-
+  const ENV_D1 = import.meta.env.COSCUP_AGENDA_DATE_D1
+  const ENV_D2 = import.meta.env.COSCUP_AGENDA_DATE_D2
 </script>
 
 <template>
 <div id="agenda">
   <nav>
-    <a href="#20230729" v-bind:class="{ active: (today == '20230729') }">D1</a>
-    <a href="#20230730" v-bind:class="{ active: (today == '20230730') }">D2</a>
+    <a :href="'#' + ENV_D1" v-bind:class="{ active: (today == ENV_D1) }">D1</a>
+    <a :href="'#' + ENV_D2" v-bind:class="{ active: (today == ENV_D2) }">D2</a>
     <a v-on:click.prevent="toggleNextOnly" v-bind:class="{ active: nextOnly }">找</a>
     <a v-on:click.prevent="toggleStarredOnly" v-bind:class="{ active: starredOnly }">星</a>
     <a v-on:click.prevent="toggleTimeMachine" v-bind:class="{ active: timeMachine }">跳</a>

@@ -1,3 +1,8 @@
+<script setup>
+  const console = globalThis.console
+
+</script>
+
 <template>
 <div id="agenda">
   <nav>
@@ -6,13 +11,14 @@
     <a v-on:click.prevent="toggleNextOnly" v-bind:class="{ active: nextOnly }">找</a>
     <a v-on:click.prevent="toggleStarredOnly" v-bind:class="{ active: starredOnly }">星</a>
     <a v-on:click.prevent="toggleTimeMachine" v-bind:class="{ active: timeMachine }">跳</a>
-    <a style="font-weight:bold" onclick="reloadPrograms(true);">更</a>
+    <a style="font-weight:bold" v-on:click.prevent="reloadPrograms(true)">更</a>
+    <a void id="theme-toggler" v-on:click.prevent="toggleTheme">{{ currentThemeText }}</a>
   </nav>
 
   <div class="time-machine" v-if="timeMachine">
     時光機 ▸ {{ timeMachineTime.format('MM 月 DD 日 HH 時 mm 分') }}
     <input type="range" min="510" max="1200" v-model="timeMachineValue"
-      onchange="timeMachineJump();" oninput="timeMachineJumpThrottled();">
+      v-on:change="timeMachineJump" v-on:input="timeMachineJumpThrottled">
   </div>
 
   <div class="no-talks" v-if="nextOnly && tracks.every(t => !t.hasNextOrOngoing)">
@@ -75,7 +81,3 @@
   </div>
 </div>
 </template>
-
-<script setup>
-  const console = globalThis.console
-</script>

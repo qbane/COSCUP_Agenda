@@ -1,6 +1,20 @@
 import Vue from 'vue'
 import Agenda from './components/Agenda.vue'
 
+import {
+  timeMachineJump,
+  timeMachineJumpThrottled,
+  timeMachineStop,
+  updateTracks,
+} from './lib'
+
+const libFuncs = {
+  timeMachineJump,
+  timeMachineJumpThrottled,
+  timeMachineStop,
+  reloadPrograms,
+}
+
 Vue.directive('swipeleft', {
   bind: function(el, binding, vnode) {
     let startX, startPageTop, originLeft, starredYet;
@@ -54,10 +68,11 @@ Vue.directive('swipeleft', {
   },
 });
 
-const agendaView = new Vue({
+export const agendaView = new Vue({
   setup: Agenda.setup,
   render: Agenda.render,
   data: {
+    currentTheme: document.querySelector('html').classList.contains('dark') ? 'dark' : 'light',
     today: moment().format('YYYYMMDD'),
     tracks: [],
     nextOnly: false,
@@ -69,11 +84,24 @@ const agendaView = new Vue({
     online: window.navigator.onLine,
   },
   computed: {
+    currentThemeText: function() {
+      return this.currentTheme == 'dark' ? '🌙' : '☀️'
+    },
     timeMachineTime: function() {
       return moment(this.today).startOf('day').add(this.timeMachineValue, 'minutes');
     },
   },
   methods: {
+    toggleTheme: function() {
+      if (this.currentTheme == 'dark') {
+        this.currentTheme = 'light'
+      } else {
+        this.currentTheme = 'dark'
+      }
+      localStorage.theme = this.currentTheme
+      __set_theme__(this.currentTheme)
+    },
+
     updateTracks: function(today, tracks, speakersById) {
       this.today = today;
       this.tracks = tracks;
@@ -125,113 +153,13 @@ const agendaView = new Vue({
     setOnline: function(isOnline) {
       this.online = isOnline;
     },
+
+    ...libFuncs,
   },
 });
 
 agendaView.$mount(document.getElementById('app'))
 
-// this should be put into agendaView ?
-function updateTracks(programs) {
-  let today = moment().format('YYYYMMDD');
-  if (window.location.hash) {
-    const timestamp = window.location.hash.substring(1);
-    today = moment(timestamp).format('YYYYMMDD');
-  }
-
-  let now = moment();
-  if (agendaView.timeMachine) {
-    now = agendaView.timeMachineTime;
-  }
-  else if (now.format('YYYYMMDD') != today) {
-    now = moment(0);
-  }
-
-  const tracksWithTalks = programs.rooms.map(room => {
-    const roomId = room.id;
-
-    let priorityTags = [
-      'mandarin', 'english', 'taiwanese', 'japanese', // langauges
-      'beginner', 'skilled', 'advanced', 'workshop', // levels
-    ];
-
-    let allTags = programs.tags.filter(tag => tag.id.trim()); // tags contain a `" "` element...
-    allTags = allTags.filter(tag => priorityTags.indexOf(tag.id) >= 0).concat(
-      allTags.filter(tag => priorityTags.indexOf(tag.id) < 0))
-
-    let firstFuture = true;
-    const talks = programs.sessions
-      .filter(t => t.room == roomId)
-      .map(t => ({
-        ...t,
-        beginMoment: moment(t.start),
-        endMoment: moment(t.end),
-        type: programs.session_types
-          .filter(type => type.id == t.type)
-          .map(type => type.zh.name),
-        tags: allTags
-          .filter(tag => t.tags.indexOf(tag.id) >= 0)
-          .map(tag => tag.zh.name.trim()),
-      }))
-      .filter(t => t.beginMoment.format('YYYYMMDD') == today)
-      .sort((a, b) => (a.beginMoment - b.beginMoment))
-      .map((t, index, talks) => {
-        let isNext = false;
-        if ((t.beginMoment > now) && firstFuture) {
-          firstFuture = false;
-          isNext = true;
-        }
-        return {
-          ...t,
-          isExpired: (t.endMoment < now),
-          isOngoing: (t.beginMoment <= now && t.endMoment >= now),
-          isNext: isNext,
-        };
-      });
-    return {
-      roomName: room.zh.name,
-      roomId: roomId,
-      talks,
-      hasNextOrOngoing: (talks.filter(t => t.isOngoing || t.isNext).length > 0),
-    };
-  }).filter(t => t.talks.length);
-
-  // COSCUP 2023
-  const sortedRoomIds = [
-    'RB105', 'AU101',
-    'TR209', 'TR211', 'TR212', 'TR213', 'TR214',
-    'TR310-1', 'TR310-2', 'TR311', 'TR313',
-    'TR409-1', 'TR409-2', 'TR410', 'TR411', 'TR412-1', 'TR412-2', 'TR413-1', 'TR413-2',
-    'TR510'
-  ];
-  const sortedTracksWithTalks = tracksWithTalks.sort((a, b) =>
-    (sortedRoomIds.indexOf(a.roomId) - sortedRoomIds.indexOf(b.roomId)));
-
-  let speakersById = {};
-  programs.speakers.forEach(speaker => {
-    speakersById[speaker.id] = speaker;
-  });
-
-  window.speakersById = speakersById;
-  agendaView.updateTracks(today, sortedTracksWithTalks, speakersById);
-}
-
-let tmTimer = undefined;
-function timeMachineJumpThrottled() {
-  if (!tmTimer) {
-    tmTimer = setTimeout(function() {
-      timeMachineJump();
-      tmTimer = undefined;
-    }, 100);
-  }
-}
-
-function timeMachineJump() {
-  updateTracks(window.programs);
-}
-
-function timeMachineStop() {
-  updateTracks(window.programs);
-}
 
 const programsUri = 'https://coscup.org/2023/json/session.json';
 
@@ -249,7 +177,7 @@ function onProgramsUpdated(programs) {
   refreshInterval = setInterval(() => updateTracks(programs), 60000);
 }
 
-function reloadPrograms(forced) {
+export function reloadPrograms(forced) {
   const uri = programsUri + (forced ? ('?' + (new Date().getTime())) : '');
   fetch(uri).then(r => r.json()).then(programs => {
     localStorage.setItem('programs', JSON.stringify(programs));
@@ -272,12 +200,14 @@ if (!window.location.hash) {
 
 if (process.env.NODE_ENV !== 'development') {
   if (window.navigator.serviceWorker) {
-    window.navigator.serviceWorker
-      .register('service_worker.js')
-      .then(reg => {
-        console.log(reg.scope);
-        window.serviceWorkerReg = reg;
-      });
+    import('./service_worker.js?url').then(({default: serviceWorkerUrl}) => {
+      window.navigator.serviceWorker
+        .register(serviceWorkerUrl)
+        .then(reg => {
+          console.log('Registered service worker', reg.scope);
+          window.serviceWorkerReg = reg;
+      })
+    });
   }
 } else {
   console.debug('Ignoring service worker in development mode')

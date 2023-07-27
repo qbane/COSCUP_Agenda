@@ -8,19 +8,20 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
+  <meta name="color-scheme" content="dark light">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="COSCUP 2023">
-  <link rel="shortcut icon" href="coscup.jpg">
-  <link rel="apple-touch-icon" href="coscup.jpg">
-  <link rel="apple-touch-icon" sizes="152x152" href="coscup.jpg">
-  <link rel="apple-touch-icon" sizes="180x180" href="coscup.jpg">
-  <link rel="apple-touch-icon" sizes="167x167" href="coscup.jpg">
+  <link rel="shortcut icon" href="/coscup.jpg">
+  <link rel="apple-touch-icon" href="/coscup.jpg">
+  <link rel="apple-touch-icon" sizes="152x152" href="/coscup.jpg">
+  <link rel="apple-touch-icon" sizes="180x180" href="/coscup.jpg">
+  <link rel="apple-touch-icon" sizes="167x167" href="/coscup.jpg">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.css">
-  <link rel="manifest" type="application/manifest+json" href="manifest.webmanifest">
+  <link rel="manifest" type="application/manifest+json" href="/manifest.webmanifest">
   <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
@@ -42,6 +43,25 @@
   </div>
 </footer>
 
+<script>
+  try {
+    function __set_theme__(theme) {
+      const hcl = document.querySelector('html').classList
+      hcl.remove('light', 'dark')
+      hcl.add(theme);
+    }
+
+    if (!('theme' in localStorage)) {
+      localStorage.theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light';
+    }
+
+    __set_theme__(localStorage.theme);
+  } catch (e) {
+    console.error(e);
+  }
+</script>
 <script type="module" src="/src/script.js"></script>
 </body>
 </html>

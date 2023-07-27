@@ -10,12 +10,13 @@ export default defineConfig(async ({ mode }) => {
           'service_worker': 'src/service_worker.js',
         },
         output: {
-          // do not generate hashes
+          // do not generate hashes (for sw)
           entryFileNames: '[name].js',
-          chunkFileNames: 'chunks/[name].js',
+          chunkFileNames: '_chunks/[name].js',
           assetFileNames({name}) {
             if (name == 'index.css') return 'style.css'
-            return 'assets/[name][extname]'
+            // sw must be at root
+            return '[name][extname]'
           },
         },
       },

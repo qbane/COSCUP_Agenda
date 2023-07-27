@@ -200,14 +200,13 @@ if (!window.location.hash) {
 
 if (process.env.NODE_ENV !== 'development') {
   if (window.navigator.serviceWorker) {
-    import('./service_worker.js?url').then(({default: serviceWorkerUrl}) => {
-      window.navigator.serviceWorker
-        .register(serviceWorkerUrl)
-        .then(reg => {
-          console.log('Registered service worker', reg.scope);
-          window.serviceWorkerReg = reg;
-      })
-    });
+    const serviceWorkerUrl = '/service_worker.js';
+    window.navigator.serviceWorker
+      .register(serviceWorkerUrl)
+      .then(reg => {
+        console.log('Registered service worker', reg.scope);
+        window.serviceWorkerReg = reg;
+      });
   }
 } else {
   console.debug('Ignoring service worker in development mode')

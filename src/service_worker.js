@@ -1,4 +1,4 @@
-const cacheKey = 'v4';
+const cacheKey = 'v5';
 console.log(`cacheKey = [${cacheKey}]`);
 
 this.addEventListener('install', evt => {
@@ -6,10 +6,11 @@ this.addEventListener('install', evt => {
   evt.waitUntil(
     caches.open(cacheKey).then(cache => {
       return cache.addAll([
-        '.',
-        'manifest.webmanifest',
-        'index.html',
-        'coscup.jpg',
+        '/',
+        '/manifest.webmanifest',
+        '/index.html',
+        '/style.css',
+        '/coscup.jpg',
       ]);
     }));
 });

@@ -10,9 +10,12 @@ export default defineConfig(async ({ mode }) => {
           'service_worker': 'src/service_worker.js',
         },
         output: {
+          // do not generate hashes
+          entryFileNames: '[name].js',
+          chunkFileNames: 'chunks/[name].js',
           assetFileNames({name}) {
             if (name == 'index.css') return 'style.css'
-            return '[name][extname]'
+            return 'assets/[name][extname]'
           },
         },
       },

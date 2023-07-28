@@ -20,9 +20,9 @@
   "license": "UNLICENSED",
   "homepage": "https://coscup.qbane.me",
   "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
     "@vitejs/plugin-vue2": "^2.2.0",
     "vite": "^4.4.6",
-    "vite-plugin-pwa": "^0.16.4",
     "vue": "^2.7.14"
   }
 }

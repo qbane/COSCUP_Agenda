@@ -104,6 +104,7 @@ html.dark .no-talks {
   margin-top: 20pt;
 
   position: sticky;
+  z-index: 1;
   /* FIXME: approximated */
   top: calc(20pt + 1.15rem);
 }

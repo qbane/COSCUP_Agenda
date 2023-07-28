@@ -102,11 +102,11 @@ export const agendaView = new Vue({
       __set_theme__(this.currentTheme)
     },
 
-    updateTracks: function(today, tracks, speakersById) {
+    updateTracks: function(today, tracks, speakersById, ts = undefined) {
       this.today = today;
       this.tracks = tracks;
       this.speakersById = speakersById;
-      this.lastUpdate = moment();
+      this.lastUpdate = moment(ts);
     },
 
     toggleTalkDetails: function(evt) {
@@ -180,6 +180,7 @@ function onProgramsUpdated(programs) {
 export function reloadPrograms(forced) {
   const uri = programsUri + (forced ? ('?' + (new Date().getTime())) : '');
   fetch(uri).then(r => r.json()).then(programs => {
+    programs.__timestamp__ = Date.now()
     localStorage.setItem('programs', JSON.stringify(programs));
     onProgramsUpdated(programs);
   });
@@ -188,6 +189,10 @@ export function reloadPrograms(forced) {
 const cachedPrograms = localStorage.getItem('programs');
 if (cachedPrograms) {
   const programs = JSON.parse(cachedPrograms);
+  if (programs.__timestamp__ === undefined) {
+    // un-polished object
+    programs.__timestamp__ = Date.now()
+  }
   onProgramsUpdated(programs);
 }
 else {
@@ -218,19 +223,30 @@ function purgeOfflineData() {
   localStorage.removeItem('programs');
   console.log('Removed cached programs');
 
-  const channel = new MessageChannel();
-  channel.port1.onmessage = evt => {
-    if (evt.data.ok) {
-      console.log('Confirmed caches purged');
-      window.serviceWorkerReg.update().then(() => {
-        window.location.reload();
-      });
-    }
-  };
-  window.navigator.serviceWorker.controller.postMessage({
-    action: 'purgeCache',
-  }, [channel.port2]);
+  function afterPurgeComplete() {
+    window.location.reload();
+  }
+
+  const swController = window.navigator.serviceWorker.controller;
+  if (swController) {
+    console.log('Notifying service worker to purge cache...');
+    const channel = new MessageChannel();
+    channel.port1.onmessage = evt => {
+      if (evt.data.ok) {
+        console.log('Confirmed caches purged');
+        window.serviceWorkerReg.update().then(afterPurgeComplete);
+      }
+    };
+    swController.postMessage({
+      action: 'purgeCache',
+    }, [channel.port2]);
+  } else {
+    console.log('No service worker detected; refreshing soon...');
+    setTimeout(afterPurgeComplete, 250);
+  }
 }
+
+window.purgeOfflineData = purgeOfflineData
 
 window.addEventListener('online', () => agendaView.setOnline(true));
 window.addEventListener('offline', () => agendaView.setOnline(false));

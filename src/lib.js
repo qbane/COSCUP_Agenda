@@ -100,5 +100,5 @@ export function updateTracks(programs) {
   });
 
   window.speakersById = speakersById;
-  agendaView.updateTracks(today, sortedTracksWithTalks, speakersById);
+  agendaView.updateTracks(today, sortedTracksWithTalks, speakersById, programs.__timestamp__);
 }

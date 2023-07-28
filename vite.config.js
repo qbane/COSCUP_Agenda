@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue2'
+import basicSSL from '@vitejs/plugin-basic-ssl'
 
 export default defineConfig(async ({ mode }) => {
   return {
@@ -23,6 +24,7 @@ export default defineConfig(async ({ mode }) => {
       assetsInlineLimit: 0,
     },
     plugins: [
+      basicSSL(),
       vue({
         template: {
           compilerOptions: {

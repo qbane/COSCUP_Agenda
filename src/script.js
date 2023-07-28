@@ -235,7 +235,10 @@ function purgeOfflineData() {
     channel.port1.onmessage = evt => {
       if (evt.data.ok) {
         console.log('Confirmed caches purged');
-        window.serviceWorkerReg.update().then(afterPurgeComplete);
+        window.serviceWorkerReg.update()
+          // ignore failure :3
+          .then(() => void window.serviceWorkerReg.unregister())
+          .then(afterPurgeComplete);
       }
     };
     swController.postMessage({

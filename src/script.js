@@ -190,8 +190,9 @@ const cachedPrograms = localStorage.getItem('programs');
 if (cachedPrograms) {
   const programs = JSON.parse(cachedPrograms);
   if (programs.__timestamp__ === undefined) {
-    // un-polished object
-    programs.__timestamp__ = Date.now()
+    // un-patched object
+    programs.__timestamp__ = Date.now();
+    localStorage.setItem('programs', JSON.stringify(programs));
   }
   onProgramsUpdated(programs);
 }

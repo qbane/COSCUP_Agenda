@@ -46,10 +46,12 @@
         v-bind:data-talk-id="talk.id">
         <div style="white-space:nowrap;overflow:hidden">
           <span class="talk-time">{{ talk.beginMoment.format('HH:mm') }}–{{ talk.endMoment.format('HH:mm') }}</span>
-          <span class="talk-type" v-if="talk.type.length">{{ talk.type[0] }}</span>
-          <span class="talk-tags" v-if="talk.tags.length">
-            <span class="talk-tag" v-for="tag in talk.tags">{{ tag }}</span>
-          </span>
+          <div class="talk-meta-info">
+            <span class="talk-type" v-if="talk.type.length">{{ talk.type[0] }}</span>
+            <span class="talk-tags" v-if="talk.tags.length">
+              <span class="talk-tag" v-for="tag in talk.tags">{{ tag }}</span>
+            </span>
+          </div>
           <a class="talk-permalink" v-bind:href="talk.uri" target="_blank" v-on:mouseup.stop>🌐</a>
         </div>
         <div style="margin:3pt 0;" v-if="!talk.expire"></div>

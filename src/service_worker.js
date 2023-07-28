@@ -2,7 +2,7 @@
 /// <reference lib="es2015" />
 /// <reference lib="webworker" />
 
-const cacheKey = 'v5';
+const cacheKey = 'v6';
 console.log(`cacheKey = [${cacheKey}]`);
 
 /** @type {ServiceWorkerGlobalScope} */
@@ -16,6 +16,7 @@ sw.addEventListener('install', evt => {
         '/',
         '/manifest.webmanifest',
         '/index.html',
+        '/index.js',
         '/style.css',
         '/coscup.jpg',
       ]);

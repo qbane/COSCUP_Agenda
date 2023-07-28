@@ -133,7 +133,12 @@ html.dark .talk:nth-child(odd) {
   font-weight: bold;
 }
 
+html.dark .talk-time {
+  color: hsl(165, 50%, 60%);
+}
+
 .talk-permalink {
+  font-size: 18pt;
   filter: grayscale(100%);
   text-decoration: none;
   float: right;
@@ -205,9 +210,17 @@ html.dark .talk-tag {
   background: hsl(210, 70%, 27%);
 }
 
+.talk-meta-info {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: start;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
 .talk-meta-links {
   display: flex;
-  font-size: .9em;
+  font-size: 12pt;
   gap: .75em;
   justify-content: flex-end;
 }
@@ -215,6 +228,10 @@ html.dark .talk-tag {
 .talk-meta-links a {
   text-decoration: none;
   color:  hsl(165, 30%, 40%);
+}
+
+html.dark .talk-meta-links a {
+  color:  hsl(165, 30%, 60%);
 }
 
 .talk.expired {
@@ -273,6 +290,11 @@ html.dark .talk-tag {
   font-weight: bold;
   color: hsl(210, 80%, 30%);
 }
+
+html.dark .time-machine {
+  color: hsl(210, 80%, 70%);
+}
+
 .time-machine input[type=range] {
   -webkit-appearance: none;
   width: 90%;
@@ -281,13 +303,15 @@ html.dark .talk-tag {
 .time-machine input[type=range]:focus {
   outline: none;
 }
-.time-machine input[type=range]::-webkit-slider-runnable-track {
+.time-machine input[type=range]::-webkit-slider-runnable-track,
+.time-machine input[type=range]::-moz-range-track {
   height: 8pt;
   background: hsl(210, 50%, 85%);
   border-radius: 4pt;
   border: 0;
 }
-.time-machine input[type=range]::-webkit-slider-thumb {
+.time-machine input[type=range]::-webkit-slider-thumb,
+.time-machine input[type=range]::-moz-range-thumb {
   width: 20pt;
   height: 20pt;
   border: 0;

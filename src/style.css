@@ -44,20 +44,29 @@ footer a {
 }
 
 nav {
-  display: block;
+  display: flex;
   text-align: center;
   margin: 10pt 0;
-  padding: 10pt 0;
+  padding: 5pt 5pt;
+  gap: 5pt;
+  flex-wrap: wrap;
+  justify-content: center;
   position: sticky;
   position: -webkit-sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, .5);
   backdrop-filter: blur(7px) contrast(1.25);
   -webkit-backdrop-filter: blur(7px) contrast(1.25);
   z-index: 5566;
 }
 
+html.dark nav {
+  background: transparent;
+  backdrop-filter: blur(7px);
+}
+
 nav a {
+  display: block;
   background: hsl(165, 80%, 40%);
   padding: 5pt 7pt;
   color: white;
@@ -73,10 +82,6 @@ nav a {
 
 nav a.active {
   filter: grayscale(0%);
-}
-
-nav a + a {
-  margin-left: 5pt;
 }
 
 .no-talks {
@@ -332,9 +337,6 @@ html.dark .time-machine {
   margin-left: 15pt;
   border-radius: 2pt;
   font-size: inherit;
-  position: absolute;
-  right: 8px;
-  bottom: 6px;
 
   background: hsl(165, 80%, 40%);
   filter: grayscale(100%);

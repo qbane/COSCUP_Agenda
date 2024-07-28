@@ -251,6 +251,15 @@ if (process.env.NODE_ENV !== 'development') {
 
 function purgeOfflineData() {
   if (!window.navigator.onLine) return;
+  if (!confirm('Are you sure?')) return;
+
+  const div = document.createElement('div')
+  div.style = `position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0; z-index: 55666;
+    background: #8886; font-size: 8em; text-align: center;
+    backdrop-filter: blur(2px)`
+  div.textContent = '🗑️'
+  document.body.appendChild(div)
 
   localStorage.removeItem('programs');
   console.log('Removed cached programs');
@@ -259,6 +268,8 @@ function purgeOfflineData() {
   console.log('Removed theme config');
 
   function afterPurgeComplete() {
+    // to avoid stale hash
+    window.location.hash = '';
     window.location.reload();
   }
 

@@ -51,7 +51,7 @@ nav {
   position: sticky;
   position: -webkit-sticky;
   top: 0;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(7px) contrast(1.25);
   -webkit-backdrop-filter: blur(7px) contrast(1.25);
   z-index: 5566;
@@ -323,6 +323,21 @@ html.dark .time-machine {
   border: solid 1pt hsl(210, 80%, 50%);
   box-shadow: inset 0 1pt 0 rgba(255, 255, 255, 0.4), 0 1pt 1pt rgba(0, 0, 0, 0.2);
   */
+}
+
+#quick-navigator {
+  border: 0 none;
+  padding: 5pt 7pt;
+  margin: 0;
+  margin-left: 15pt;
+  border-radius: 2pt;
+  font-size: inherit;
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+
+  background: hsl(165, 80%, 40%);
+  filter: grayscale(100%);
 }
 
 .last-update {

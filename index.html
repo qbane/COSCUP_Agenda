@@ -38,7 +38,7 @@
     &nbsp;|&nbsp;
     <a onclick="purgeOfflineData()">清理離線資料 🗑</a>
     <div style="margin-top:4pt;color:hsl(0, 0%, 80%);font-family:monospace;">
-      <a style="color: hsl(240, 90%, 64%);" href="https://github.com/qbane/COSCUP_Agenda" target="_blank">v20230728r2</a> fork of @qbane
+      <a style="color: hsl(240, 90%, 64%);" href="https://github.com/qbane/COSCUP_Agenda" target="_blank">v20240729r0</a> fork of @qbane
     </div>
   </div>
 </footer>
@@ -51,13 +51,15 @@
       hcl.add(theme);
     }
 
-    if (!('theme' in localStorage)) {
-      localStorage.theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+    let theme;
+    if ('theme' in localStorage) {
+      theme = localStorage.theme;
+    } else {
+      theme = window.matchMedia('(prefers-color-scheme: dark)').matches
         ? 'dark'
         : 'light';
     }
-
-    __set_theme__(localStorage.theme);
+    __set_theme__(theme);
   } catch (e) {
     console.error(e);
   }

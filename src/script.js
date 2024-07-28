@@ -77,6 +77,7 @@ export const agendaView = new Vue({
     tracks: [],
     nextOnly: false,
     starredOnly: false,
+    roomIdsByFloors: [],
     timeMachine: false,
     timeMachineValue: 0,
     starreds: JSON.parse(localStorage.getItem('starreds') || '[]'),
@@ -90,6 +91,15 @@ export const agendaView = new Vue({
     timeMachineTime: function() {
       return moment(this.today).startOf('day').add(this.timeMachineValue, 'minutes');
     },
+    trackToVisibility: function() {
+      const { nextOnly, starredOnly, starreds } = this
+      return Object.fromEntries(this.tracks.map(track => [
+        track.roomId,
+          (!nextOnly && !starredOnly) ||
+          (nextOnly && track.hasNextOrOngoing) ||
+          (starredOnly && track.talks.filter(t => starreds.indexOf(t.id) >= 0).length)
+        ]))
+    }
   },
   methods: {
     toggleTheme: function() {
@@ -102,10 +112,31 @@ export const agendaView = new Vue({
       __set_theme__(this.currentTheme)
     },
 
-    updateTracks: function(today, tracks, speakersById, ts = undefined) {
+    navigateToTrack: function(evt) {
+      const floorId = evt.currentTarget.value
+      if (floorId === '__top__') {
+        window.scrollTo(0, 0);
+      } else if (floorId === '__bottom__') {
+        window.scrollTo(0, document.body.scrollHeight);
+      } else {
+        // to work around sticky elements; not pixel perfect but usable
+        window.scrollTo(0, 0);
+        setTimeout(() => {
+          const el = document.querySelector(`[data-floor-id="${floorId}"]`)
+          if (el) {
+            el.scrollIntoView({block: 'start'})
+          }
+        })
+      }
+
+      evt.currentTarget.value = ''
+    },
+
+    updateTracks: function(today, tracks, speakersById, roomIdsByFloors, ts = undefined) {
       this.today = today;
       this.tracks = tracks;
       this.speakersById = speakersById;
+      this.roomIdsByFloors = roomIdsByFloors;
       this.lastUpdate = moment(ts);
     },
 
@@ -223,6 +254,9 @@ function purgeOfflineData() {
 
   localStorage.removeItem('programs');
   console.log('Removed cached programs');
+
+  localStorage.removeItem('theme');
+  console.log('Removed theme config');
 
   function afterPurgeComplete() {
     window.location.reload();

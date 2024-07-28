@@ -14,6 +14,12 @@
     <a v-on:click.prevent="toggleTimeMachine" v-bind:class="{ active: timeMachine }">跳</a>
     <a style="font-weight:bold" v-on:click.prevent="reloadPrograms(true)">更</a>
     <a void id="theme-toggler" v-on:click.prevent="toggleTheme">{{ currentThemeText }}</a>
+    <select id="quick-navigator" v-on:change="navigateToTrack">
+      <option value="" selected>⏩</option>
+      <option value="__top__">🔼</option>
+      <option v-for="[floorName, roomIds] in roomIdsByFloors" v-bind:disabled="roomIds.every(id => !trackToVisibility[id])" v-bind:value="floorName">{{ floorName }}</option>
+      <option value="__bottom__">🔽</option>
+    </select>
   </nav>
 
   <div class="time-machine" v-if="timeMachine">
@@ -33,9 +39,8 @@
     試試看在議程上往左滑動來標註！
   </div>
 
-  <div class="track" v-for="track in tracks"
-    v-if="(!nextOnly && !starredOnly) || (nextOnly && track.hasNextOrOngoing) || (starredOnly && track.talks.filter(t => starreds.indexOf(t.id) >= 0).length)">
-    <h2 class="track-title">{{ track.roomName }}</h2>
+  <div class="track" v-for="track in tracks" v-if="trackToVisibility[track.roomId]">
+    <h2 class="track-title" v-bind:data-floor-id="roomIdsByFloors.map(([fid, arr]) => arr.includes(track.roomId) && fid).filter(x => x !== false)[0]">{{ track.roomName }}</h2>
     <div class="talks" v-bind:class="{ nextOnly: nextOnly, starredOnly: starredOnly }">
       <div class="talk" v-for="(talk, index) in track.talks"
         v-bind:class="{ expired: talk.isExpired, ongoing: talk.isOngoing, next: talk.isNext,

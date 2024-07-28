@@ -83,14 +83,17 @@ export function updateTracks(programs) {
     };
   }).filter(t => t.talks.length);
 
-  // COSCUP 2023
-  const sortedRoomIds = [
-    'RB105', 'AU101',
-    'TR209', 'TR211', 'TR212', 'TR213', 'TR214',
-    'TR310-1', 'TR310-2', 'TR311', 'TR313',
-    'TR409-1', 'TR409-2', 'TR410', 'TR411', 'TR412-1', 'TR412-2', 'TR413-1', 'TR413-2',
-    'TR510'
+  // COSCUP 2024
+  const roomIdsByFloors = [
+    ['1F', ['RB105', 'RB101', 'RB102']],
+    ['2F', ['TR209', 'TR210', 'TR211', 'TR212', 'TR213', 'TR214']],
+    ['3F', ['TR313']],
+    ['4F', ['TR409-2', 'TR410', 'TR411', 'TR412-1', 'TR412-2', 'TR413-1', 'TR413-2']],
+    ['5F', ['TR510', 'TR511', 'TR512', 'TR513', 'TR514']],
+    ['6F', ['TR609', 'TR610', 'TR611', 'TR613', 'TR614', 'TR615', 'TR616']],
   ];
+  const sortedRoomIds = roomIdsByFloors.map(([, snd]) => snd).flat()
+
   const sortedTracksWithTalks = tracksWithTalks.sort((a, b) =>
     (sortedRoomIds.indexOf(a.roomId) - sortedRoomIds.indexOf(b.roomId)));
 
@@ -100,5 +103,5 @@ export function updateTracks(programs) {
   });
 
   window.speakersById = speakersById;
-  agendaView.updateTracks(today, sortedTracksWithTalks, speakersById, programs.__timestamp__);
+  agendaView.updateTracks(today, sortedTracksWithTalks, speakersById, roomIdsByFloors, programs.__timestamp__);
 }

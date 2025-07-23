@@ -158,6 +158,28 @@ html.dark .talk-time {
   display: inline-block;
 }
 
+.talk.display-details .talk-speakers {
+  display: block;
+  margin-top: .5em;
+}
+
+.talk.display-details .talk-speakers .paren {
+  display: none;
+}
+
+.talk-speakers-avatar {
+  height: 16px;
+  vertical-align: middle;
+  display: inline-block;
+  padding: 0 .25em;
+  filter: grayscale(.5);
+}
+
+.talk.display-details .talk-speakers-avatar {
+  height: 48px;
+  filter: none;
+}
+
 html.dark .talk-speakers {
   color: hsl(0, 0%, 65%);
 }
@@ -237,6 +259,16 @@ html.dark .talk-tag {
 
 html.dark .talk-meta-links a {
   color:  hsl(165, 30%, 60%);
+}
+
+.talk {
+  border-left: 6px solid #ffffff08;
+  border-right: 6px solid transparent;
+}
+
+/* should be placed before any other variants */
+.talk.display-details {
+  border-left: 6px solid #ffffff40;
 }
 
 .talk.expired {

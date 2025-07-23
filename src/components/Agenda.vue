@@ -62,7 +62,13 @@
         <div style="margin:3pt 0;" v-if="!talk.expire"></div>
         <span class="talk-title">{{ talk.zh.title }}</span>
         <span class="talk-speakers" v-if="talk.speakers.length">
-          ({{ talk.speakers.map(speakerId => speakersById[speakerId]).map(s => s.zh.name).join(', ') }})
+          <span class="paren">(</span><!--
+          --><template v-for="(s, index) in talk.speakers.map(speakerId => speakersById[speakerId])"><!--
+          --><template v-if="index > 0">, </template><!--
+          --><img class="talk-speakers-avatar" v-if="s.avatar" v-bind:src="s.avatar"><!--
+          -->{{ s.zh.name }}<!--
+          --></template><!--
+          --><span class="paren">)</span>
         </span>
         <div class="talk-intro" v-if="talk.zh.description">
           <span v-html="talk.zh.description.replace(/(\r?\n)+/g, '&lt;br>')"></span>

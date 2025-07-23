@@ -18,6 +18,18 @@ export function timeMachineStop() {
   updateTracks(window.programs);
 }
 
+const predefinedLangs = {
+  Mandarin: '漢語',
+  English: '英語',
+  Japanese: '日語',
+  'Taiwan Taigi': '臺語',
+}
+
+function getLanguageTrans(la) {
+  if (predefinedLangs[la]) return predefinedLangs[la]
+  return la.length > 30 ? la.slice(0, 30) + '...' : la
+}
+
 // this should be put into agendaView ?
 export function updateTracks(programs) {
   let today = moment().format('YYYYMMDD');
@@ -37,6 +49,7 @@ export function updateTracks(programs) {
   const tracksWithTalks = programs.rooms.map(room => {
     const roomId = room.id;
 
+    /*
     let priorityTags = [
       'mandarin', 'english', 'taiwanese', 'japanese', // langauges
       'beginner', 'skilled', 'advanced', 'workshop', // levels
@@ -45,6 +58,8 @@ export function updateTracks(programs) {
     let allTags = programs.tags.filter(tag => tag.id.trim()); // tags contain a `" "` element...
     allTags = allTags.filter(tag => priorityTags.indexOf(tag.id) >= 0).concat(
       allTags.filter(tag => priorityTags.indexOf(tag.id) < 0))
+    */
+    const allTags = []
 
     let firstFuture = true;
     const talks = programs.sessions
@@ -58,7 +73,8 @@ export function updateTracks(programs) {
           .map(type => type.zh.name),
         tags: allTags
           .filter(tag => t.tags.indexOf(tag.id) >= 0)
-          .map(tag => tag.zh.name.trim()),
+          .map(tag => tag.zh.name.trim())
+          .concat(getLanguageTrans(t.language)),
       }))
       .filter(t => t.beginMoment.format('YYYYMMDD') == today)
       .sort((a, b) => (a.beginMoment - b.beginMoment))
@@ -83,24 +99,24 @@ export function updateTracks(programs) {
     };
   }).filter(t => t.talks.length);
 
-  // COSCUP 2024
-  const roomIdsByFloors = [
-    ['1F', ['RB105', 'RB101', 'RB102']],
+  // COSCUP 2025
+  const roomNamesByFloors = [
+    ['1F', ['RB105', 'AU', 'RB101', 'RB102']],
     ['2F', ['TR209', 'TR210', 'TR211', 'TR212', 'TR213', 'TR214']],
-    ['3F', ['TR313']],
-    ['4F', ['TR409-2', 'TR410', 'TR411', 'TR412-1', 'TR412-2', 'TR413-1', 'TR413-2']],
-    ['5F', ['TR510', 'TR511', 'TR512', 'TR513', 'TR514']],
-    ['6F', ['TR609', 'TR610', 'TR611', 'TR613', 'TR614', 'TR615', 'TR616']],
+    ['3F', ['Hallway outside TR309', 'TR310-2', 'TR311', 'TR313']],
+    ['4F', ['Hallway outside TR409', 'TR409-2', 'TR410', 'TR411', 'TR412-1', 'TR412-2']],
+    ['5F', ['TR509', 'TR510', 'TR511', 'TR512', 'TR513', 'TR514', 'TR515']],
   ];
+
+  const roomNameToId = Object.fromEntries(programs.rooms.map(({id, zh:{name}}) => [name, id]))
+  const roomIdsByFloors = roomNamesByFloors.map(([f, names]) => [f, names.map(name => roomNameToId[name])])
+
   const sortedRoomIds = roomIdsByFloors.map(([, snd]) => snd).flat()
 
   const sortedTracksWithTalks = tracksWithTalks.sort((a, b) =>
     (sortedRoomIds.indexOf(a.roomId) - sortedRoomIds.indexOf(b.roomId)));
 
-  let speakersById = {};
-  programs.speakers.forEach(speaker => {
-    speakersById[speaker.id] = speaker;
-  });
+  const speakersById = Object.fromEntries(programs.speakers.map(sp => [sp.id, sp]));
 
   window.speakersById = speakersById;
   agendaView.updateTracks(today, sortedTracksWithTalks, speakersById, roomIdsByFloors, programs.__timestamp__);

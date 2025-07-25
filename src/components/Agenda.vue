@@ -77,7 +77,7 @@
           <div class="talk-speaker-intro"
             v-for="speaker in talk.speakers.map(speakerId => speakersById[speakerId]).filter(s => s)"
             v-if="speaker.zh.bio">
-            {{ speaker.zh.name }}  ▸ <span v-html="speaker.zh.bio.replace(/(\r?\n)+/g, '&lt;br>')"></span>
+            <span style="font-weight: 500">{{ speaker.zh.name }}</span> ▸ <span v-html="speaker.zh.bio.replace(/(\r?\n)+/g, '&lt;br>')"></span>
           </div>
           <div class="talk-meta-links">
             <a v-on:mouseup.stop v-if="talk.co_write" target="_blank" v-bind:href="talk.co_write">⧉共筆</a>

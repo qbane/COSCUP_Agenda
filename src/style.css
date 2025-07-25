@@ -262,13 +262,13 @@ html.dark .talk-meta-links a {
 }
 
 .talk {
-  border-left: 6px solid #ffffff08;
+  border-left: 6px solid #80808020;
   border-right: 6px solid transparent;
 }
 
 /* should be placed before any other variants */
 .talk.display-details {
-  border-left: 6px solid #ffffff40;
+  border-left: 6px solid #80808080;
 }
 
 .talk.expired {

@@ -49,7 +49,6 @@ export function updateTracks(programs) {
   const tracksWithTalks = programs.rooms.map(room => {
     const roomId = room.id;
 
-    /*
     let priorityTags = [
       'mandarin', 'english', 'taiwanese', 'japanese', // langauges
       'beginner', 'skilled', 'advanced', 'workshop', // levels
@@ -58,8 +57,6 @@ export function updateTracks(programs) {
     let allTags = programs.tags.filter(tag => tag.id.trim()); // tags contain a `" "` element...
     allTags = allTags.filter(tag => priorityTags.indexOf(tag.id) >= 0).concat(
       allTags.filter(tag => priorityTags.indexOf(tag.id) < 0))
-    */
-    const allTags = []
 
     let firstFuture = true;
     const talks = programs.sessions
@@ -73,8 +70,8 @@ export function updateTracks(programs) {
           .map(type => type.zh.name),
         tags: allTags
           .filter(tag => t.tags.indexOf(tag.id) >= 0)
-          .map(tag => tag.zh.name.trim())
-          .concat(getLanguageTrans(t.language)),
+          .map(tag => tag.zh.name.trim()),
+          //.concat(getLanguageTrans(t.language)),
       }))
       .filter(t => t.beginMoment.format('YYYYMMDD') == today)
       .sort((a, b) => (a.beginMoment - b.beginMoment))

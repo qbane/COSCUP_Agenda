@@ -108,7 +108,7 @@ export function updateTracks(programs) {
     ['5F', ['TR509', 'TR510', 'TR511', 'TR512', 'TR513', 'TR514', 'TR515']],
   ];
 
-  const roomNameToId = Object.fromEntries(programs.rooms.map(({id, zh:{name}}) => [name, id]))
+  const roomNameToId = Object.fromEntries(programs.rooms.map(({id, en:{name}}) => [name, id]))
   const roomIdsByFloors = roomNamesByFloors.map(([f, names]) => [f, names.map(name => roomNameToId[name])])
 
   const sortedRoomIds = roomIdsByFloors.map(([, snd]) => snd).flat()

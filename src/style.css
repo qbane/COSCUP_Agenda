@@ -144,13 +144,17 @@ html.dark .talk-time {
 
 .talk-permalink {
   font-size: 18pt;
-  filter: grayscale(100%);
+  filter: grayscale(50%);
   text-decoration: none;
   float: right;
 }
 
 .talk-title {
   font-weight: bold;
+}
+
+html.dark .talk-title {
+  color: #e0e0e0;
 }
 
 .talk-speakers {
@@ -180,6 +184,14 @@ html.dark .talk-time {
   filter: none;
 }
 
+.talk-speaker-intro-speaker {
+  font-weight: bold;
+}
+
+html.dark .talk-speaker-intro-speaker {
+  color: #e0e0e0;
+}
+
 html.dark .talk-speakers {
   color: hsl(0, 0%, 65%);
 }
@@ -200,10 +212,8 @@ html.dark .talk-speakers {
 }
 
 .talk-speaker-intro {
-  border-top: 1px solid hsl(0, 0%, 80%);
   font-size: 9pt;
-  margin: 4pt 0;
-  padding: 6pt 0;
+  margin: 6pt 0;
 }
 
 .talk-type, .talk-tag {
@@ -285,6 +295,16 @@ html.dark .talk-meta-links a {
   display: block;
   word-break: break-word;
   hyphens: auto;
+  line-height: 1.6;
+}
+
+.talk.display-details .talk-speaker-intros {
+  margin-top: 6pt;
+  border-top: 1px solid hsl(0, 0%, 80%);
+}
+
+html.dark .talk.display-details .talk-speaker-intros {
+  border-top-color: hsl(0, 0%, 40%);
 }
 
 .talk .talk-intro br {

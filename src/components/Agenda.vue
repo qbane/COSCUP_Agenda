@@ -74,10 +74,13 @@
           <span v-html="talk.zh.description.replace(/(\r?\n)+/g, '&lt;br>')"></span>
         </div>
         <div class="talk-speaker-intros">
+            <div v-if="talk.speakers.every(speakerId => !speakersById[speakerId]?.zh?.bio)" class="talk-speaker-intro" style="opacity: .5">
+            講者資訊留白
+          </div>
           <div class="talk-speaker-intro"
             v-for="speaker in talk.speakers.map(speakerId => speakersById[speakerId]).filter(s => s)"
             v-if="speaker.zh.bio">
-            <span style="font-weight: 500">{{ speaker.zh.name }}</span> ▸ <span v-html="speaker.zh.bio.replace(/(\r?\n)+/g, '&lt;br>')"></span>
+            <span class="talk-speaker-intro-speaker">{{ speaker.zh.name }}</span> ▸ <span v-html="speaker.zh.bio.replace(/(\r?\n)+/g, '&lt;br>')"></span>
           </div>
           <div class="talk-meta-links">
             <a v-on:mouseup.stop v-if="talk.co_write" target="_blank" v-bind:href="talk.co_write">⧉共筆</a>

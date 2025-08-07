@@ -49,14 +49,23 @@ export function updateTracks(programs) {
   const tracksWithTalks = programs.rooms.map(room => {
     const roomId = room.id;
 
-    let priorityTags = [
-      'mandarin', 'english', 'taiwanese', 'japanese', // langauges
-      'beginner', 'skilled', 'advanced', 'workshop', // levels
-    ];
+    // not used in 2025
+    // const priorityTags = [
+    //   'mandarin', 'english', 'taiwanese', 'japanese', // langauges
+    //   'beginner', 'skilled', 'advanced', 'workshop', // levels
+    // ];
 
     let allTags = programs.tags.filter(tag => tag.id.trim()); // tags contain a `" "` element...
-    allTags = allTags.filter(tag => priorityTags.indexOf(tag.id) >= 0).concat(
-      allTags.filter(tag => priorityTags.indexOf(tag.id) < 0))
+    allTags = allTags.filter(tag => tag.id.startsWith('language_')).concat(
+      allTags.filter(tag => !tag.id.startsWith('language_')))
+
+    // make a pseudo tag if it does not exist
+    function ensureLanguageTag(tagpairs, lang) {
+      if (!tagpairs.some(([id, tag]) => id.startsWith('language_'))) {
+        tagpairs.splice(0, 0, ['', getLanguageTrans(lang)])
+      }
+      return tagpairs.map(([x, y]) => y)
+    }
 
     let firstFuture = true;
     const talks = programs.sessions
@@ -68,10 +77,11 @@ export function updateTracks(programs) {
         type: programs.session_types
           .filter(type => type.id == t.type)
           .map(type => type.zh.name),
-        tags: allTags
-          .filter(tag => t.tags.indexOf(tag.id) >= 0)
-          .map(tag => tag.zh.name.trim()),
-          //.concat(getLanguageTrans(t.language)),
+        tags: ensureLanguageTag(
+          allTags
+            .filter(tag => t.tags.indexOf(tag.id) >= 0)
+            .map(tag => [tag.id, tag.zh.name.trim()]),
+          t.language),
       }))
       .filter(t => t.beginMoment.format('YYYYMMDD') == today)
       .sort((a, b) => (a.beginMoment - b.beginMoment))
@@ -103,6 +113,7 @@ export function updateTracks(programs) {
     ['3F', ['Hallway outside TR309', 'TR310-2', 'TR311', 'TR313']],
     ['4F', ['Hallway outside TR409', 'TR409-2', 'TR410', 'TR411', 'TR412-1', 'TR412-2']],
     ['5F', ['TR509', 'TR510', 'TR511', 'TR512', 'TR513', 'TR514', 'TR515']],
+    ['6F', ['TR6F']],
   ];
 
   const roomNameToId = Object.fromEntries(programs.rooms.map(({id, en:{name}}) => [name, id]))

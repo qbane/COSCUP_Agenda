@@ -146,7 +146,6 @@ html.dark .talk-time {
   font-size: 18pt;
   filter: grayscale(50%);
   text-decoration: none;
-  float: right;
 }
 
 .talk-title {

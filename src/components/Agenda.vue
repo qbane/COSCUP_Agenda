@@ -49,9 +49,9 @@
         v-on:mouseup.stop="toggleTalkDetails"
         v-swipeleft.stop="toggleTalkStarred"
         v-bind:data-talk-id="talk.id">
-        <div style="white-space:nowrap;overflow:hidden;display:flex">
+        <div style="white-space:nowrap;overflow:hidden;display:flex;align-items:center;gap:8px">
           <span class="talk-time">{{ talk.beginMoment.format('HH:mm') }}–{{ talk.endMoment.format('HH:mm') }}</span>
-          <div class="talk-meta-info" style="min-width:0;overflow:hidden;flex:1">
+          <div class="talk-meta-info">
             <span class="talk-type" v-if="talk.type.length">{{ talk.type[0] }}</span>
             <span class="talk-tags" v-if="talk.tags.length">
               <span class="talk-tag" v-for="tag in talk.tags">{{ tag }}</span>

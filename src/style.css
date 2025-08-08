@@ -174,7 +174,7 @@ html.dark .talk-title {
   height: 16px;
   vertical-align: middle;
   display: inline-block;
-  padding: 0 .25em;
+  margin: 0 .25em;
   filter: grayscale(.5);
   background-color: #80808080;
 }

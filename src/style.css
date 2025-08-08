@@ -177,6 +177,7 @@ html.dark .talk-title {
   display: inline-block;
   padding: 0 .25em;
   filter: grayscale(.5);
+  background-color: #80808080;
 }
 
 .talk.display-details .talk-speakers-avatar {

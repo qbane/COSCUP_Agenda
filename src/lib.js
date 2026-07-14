@@ -1,4 +1,5 @@
 import { agendaView } from './script'
+import { roomNamesByFloors } from './util'
 
 let tmTimer = undefined;
 export function timeMachineJumpThrottled() {
@@ -75,8 +76,7 @@ export function updateTracks(programs) {
         beginMoment: moment(t.start),
         endMoment: moment(t.end),
         type: programs.session_types
-          .filter(type => type.id == t.type)
-          .map(type => type.zh.name),
+          .filter(type => type.id == t.type),
         tags: ensureLanguageTag(
           allTags
             .filter(tag => t.tags.indexOf(tag.id) >= 0)
@@ -98,23 +98,17 @@ export function updateTracks(programs) {
           isNext: isNext,
         };
       });
+
+    const roomTracks = Array.from(new Set(talks.map(t => t.type[0])))
     return {
       roomName: room.zh.name,
       roomId: roomId,
+      roomTracks,
       talks,
       hasNextOrOngoing: (talks.filter(t => t.isOngoing || t.isNext).length > 0),
     };
   }).filter(t => t.talks.length);
 
-  // COSCUP 2025
-  const roomNamesByFloors = [
-    ['1F', ['RB105', 'AU', 'RB101', 'RB102']],
-    ['2F', ['TR209', 'TR210', 'TR211', 'TR212', 'TR213', 'TR214']],
-    ['3F', ['Hallway outside TR309', 'TR310-2', 'TR311', 'TR313']],
-    ['4F', ['Hallway outside TR409', 'TR409-2', 'TR410', 'TR411', 'TR412-1', 'TR412-2']],
-    ['5F', ['TR509', 'TR510', 'TR511', 'TR512', 'TR513', 'TR514', 'TR515']],
-    ['6F', ['TR6F']],
-  ];
 
   const roomNameToId = Object.fromEntries(programs.rooms.map(({id, en:{name}}) => [name, id]))
   const roomIdsByFloors = roomNamesByFloors.map(([f, names]) => [f, names.map(name => roomNameToId[name])])

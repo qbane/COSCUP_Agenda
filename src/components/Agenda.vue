@@ -40,7 +40,10 @@
   </div>
 
   <div class="track" v-for="track in tracks" v-if="trackToVisibility[track.roomId]">
-    <h2 class="track-title" v-bind:data-floor-id="roomIdsByFloors.map(([fid, arr]) => arr.includes(track.roomId) && fid).filter(x => x !== false)[0]">{{ track.roomName }}</h2>
+    <h2 class="track-title" v-bind:data-floor-id="roomIdsByFloors.map(([fid, arr]) => arr.includes(track.roomId) && fid).filter(x => x !== false)[0]"><span>{{ track.roomName }}</span><span style="font-weight: normal"><!--
+    --><a class="track-track-name" v-for="(s, index) in track.roomTracks" v-bind:href="s.link" target="_blank">{{ s.zh.name }}</a><!--
+    --></span></h2>
+    <!-- <div>{{ track.roomDescription }}</div> -->
     <div class="talks" v-bind:class="{ nextOnly: nextOnly, starredOnly: starredOnly }">
       <div class="talk" v-for="(talk, index) in track.talks"
         v-bind:class="{ expired: talk.isExpired, ongoing: talk.isOngoing, next: talk.isNext,
@@ -52,7 +55,7 @@
         <div style="white-space:nowrap;overflow:hidden;display:flex;align-items:center;gap:8px">
           <span class="talk-time">{{ talk.beginMoment.format('HH:mm') }}–{{ talk.endMoment.format('HH:mm') }}</span>
           <div class="talk-meta-info">
-            <span class="talk-type" v-if="talk.type.length">{{ talk.type[0] }}</span>
+            <span class="talk-type" v-if="talk.type.length">{{ talk.type[0].zh.name }}</span>
             <span class="talk-tags" v-if="talk.tags.length">
               <span class="talk-tag" v-for="tag in talk.tags">{{ tag }}</span>
             </span>

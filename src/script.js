@@ -7,6 +7,7 @@ import {
   timeMachineStop,
   updateTracks,
 } from './lib'
+import { envYear, parsePrograms, urlBase } from './util'
 
 const libFuncs = {
   timeMachineJump,
@@ -191,8 +192,10 @@ export const agendaView = new Vue({
 
 agendaView.$mount(document.getElementById('app'))
 
+const programsUri = envYear <= 2025 ?
+  `${urlBase}/json/session.json` :
+  `${urlBase}/session/_payload.json`;
 
-const programsUri = `https://coscup.org/${import.meta.env.COSCUP_AGENDA_YEAR}/json/session.json`;
 
 let hashChangeEvt = undefined;
 let refreshInterval = undefined;
@@ -210,7 +213,8 @@ function onProgramsUpdated(programs) {
 
 export function reloadPrograms(forced) {
   const uri = programsUri + (forced ? ('?' + (new Date().getTime())) : '');
-  fetch(uri).then(r => r.json()).then(programs => {
+  fetch(uri).then(r => r.text()).then(raw => {
+    const programs = parsePrograms(raw, envYear);
     programs.__timestamp__ = Date.now()
     localStorage.setItem('programs', JSON.stringify(programs));
     onProgramsUpdated(programs);

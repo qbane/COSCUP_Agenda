@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "allowUmdGlobalAccess": true
+  },
+  "includes": [
+    "src/types.d.ts",
+    "src/*.js",
+    "src/components/*.vue"
+  ]
+}

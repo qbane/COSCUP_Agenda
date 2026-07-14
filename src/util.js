@@ -49,6 +49,20 @@ function parseNuxtPayload2026(data) {
   return new ProgramsBuilder2026(Object.values(cands[0]).flat()).dump()
 }
 
+function translateTag(key) {
+  const mapping = {
+    'Elementary': '入門',
+    'Intermediate': '中階',
+    'Advanced': '進階',
+  }
+  const name = mapping[key] ?? key
+  return {
+    id: key,
+    zh: {name},
+    en: {name},
+  }
+}
+
 class Store {
   constructor(getKey) {
     this.getKey = getKey ?? (x => x.id)
@@ -78,7 +92,9 @@ class ProgramsBuilder2026 {
 
   dump() {
     for (const prog of this.programs) {
-      const speakers = prog.speakers.map(x => this.speakers.upsert({
+      const { speakers, track, room, tags, ...rest } = prog
+
+      const speakers_ = prog.speakers.map(x => this.speakers.upsert({
         ...x,
         avatar: x.avatar ?? '',
       }))
@@ -88,32 +104,30 @@ class ProgramsBuilder2026 {
         en: {name: prog.track.name['en']},
         link: `${urlBase}/track/${prog.track.id}`,
       })
-      const room = this.rooms.upsert({
+      const room_ = this.rooms.upsert({
         id: prog.room.en,
         zh: {name: prog.room.en},
         en: {name: prog.room.en}
       })
-      const tags = prog.tags.map(x => this.tags.upsert({
-        id: x,
-        zh: {name: x},
-        en: {name: x},
-      }))
-      tags.push(this.tags.upsert({
+      const tags_ = prog.tags.map(x => this.tags.upsert(translateTag(x)))
+      tags_.push(this.tags.upsert({
         id: prog.en.type,
-        zh: {name: prog.zh.type},
         en: {name: prog.en.type},
+        zh: {name: prog.zh.type},
       }))
+
 
       this.sessions.push({
-        ...prog,
+        ...rest,
 
-        zh: { ...prog.zh, description: prog.zh.describe },
-        en: { ...prog.en, description: prog.en.describe },
+        //                                               vvvvvvvv---- why?
+        zh: { title: prog.zh.title, description: prog.zh.describe },
+        en: { title: prog.en.title, description: prog.en.describe },
 
-        speakers,
+        speakers: speakers_,
         type: [session_type],
-        room,
-        tags,
+        room: room_,
+        tags: tags_,
       })
     }
 

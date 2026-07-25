@@ -12,4 +12,8 @@ declare global {
     serviceWorkerReg: any
     purgeOfflineData: any
   }
+
+  interface ImportMeta {
+    env: Record<`COSCUP_${string}`, string>
+  }
 }

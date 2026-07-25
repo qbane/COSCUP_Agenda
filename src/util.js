@@ -1,7 +1,10 @@
-import { parse as devalueParse } from 'devalue'
-
 export const envYear = Number.parseInt(import.meta.env.COSCUP_AGENDA_YEAR)
 export const urlBase = `https://coscup.org/${envYear}`
+
+export const programsUri = envYear <= 2025 ?
+  `${urlBase}/json/session.json` :
+  `${urlBase}/api/session`
+  // XXX: have you considered https://pretalx.coscup.org/coscup-2026/schedule/v/999/widgets/schedule.json
 
 // COSCUP 2026
 export const roomNamesByFloors = [
@@ -19,34 +22,12 @@ export function parsePrograms(data, year) {
   if (year <= 2025) {
     return JSON.parse(data)
   }
-  return parseNuxtPayload2026(data)
+  return transformNuxtApiPayload(JSON.parse(data))
 }
 
-/** @param {string} data */
-function parseNuxtPayload2026(data) {
-  const obj = devalueParse(data, {
-    ShallowReactive: x => x,
-  })
-
-  /* shape:
-    Object {
-      data: Object {
-        $fwuenr1OZcDw8TjcC-BzsU1lhSGBFolBhwdGCSmwMXKw:
-          Array(9) [Object, Object, Object, Object, Object, Object, Object, Object, Object]
-        $ftoUUvay03wjsVvLRB4QkJLEjxwDkVF3M27glSEGre1w:
-          Object {2026-08-08: Array(167), 2026-08-09: Array(166)}
-    }
-      prerenderedAt: 1783996252604
-    }
-  */
-
-  const cands = Object.values(obj.data).filter(x => !Array.isArray(x))
-
-  if (cands.length !== 1) {
-    throw new Error(`Failed to lookup program from Nuxt payload: ${JSON.stringify(obj)}`)
-  }
-
-  return new ProgramsBuilder2026(Object.values(cands[0]).flat()).dump()
+/** @param {Record<string, unknown>} data */
+function transformNuxtApiPayload(data) {
+  return new ProgramsBuilder2026(Object.values(data).flat()).dump()
 }
 
 function translateTag(key) {

@@ -7,7 +7,7 @@ import {
   timeMachineStop,
   updateTracks,
 } from './lib'
-import { envYear, parsePrograms, urlBase } from './util'
+import { envYear, parsePrograms, programsUri } from './util'
 
 const libFuncs = {
   timeMachineJump,
@@ -191,11 +191,6 @@ export const agendaView = new Vue({
 });
 
 agendaView.$mount(document.getElementById('app'))
-
-const programsUri = envYear <= 2025 ?
-  `${urlBase}/json/session.json` :
-  `${urlBase}/session/_payload.json`;
-
 
 let hashChangeEvt = undefined;
 let refreshInterval = undefined;

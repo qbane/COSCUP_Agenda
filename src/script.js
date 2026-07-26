@@ -236,12 +236,15 @@ if (!window.location.hash) {
 
 if (process.env.NODE_ENV !== 'development') {
   if (window.navigator.serviceWorker) {
-    const serviceWorkerUrl = '/service_worker.js';
+    const serviceWorkerUrl = __service_worker_url_base + '/service_worker.js';
     window.navigator.serviceWorker
       .register(serviceWorkerUrl)
       .then(reg => {
         console.log('Registered service worker', reg.scope);
         window.serviceWorkerReg = reg;
+      })
+      .catch(err => {
+        console.error('Failed to register service worker:', err)
       });
   }
 } else {

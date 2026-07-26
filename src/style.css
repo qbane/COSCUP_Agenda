@@ -113,7 +113,7 @@ html.dark .no-talks {
   top: calc(20pt + 1.15rem);
 
   display: grid;
-  grid-template-columns: minmax(80pt, 1fr) 11fr;
+  grid-template-columns: minmax(84pt, 1fr) 11fr;
   grid-auto-flow: column;
 }
 
@@ -160,7 +160,7 @@ html.dark .talk:nth-child(odd) {
 }
 
 .talk-time {
-  min-width: 72pt;
+  min-width: 76pt;
   color: hsl(165, 50%, 40%);
   font-weight: bold;
 }

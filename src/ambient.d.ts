@@ -6,6 +6,7 @@ import 'moment'
 declare global {
   const process: any
   const __set_theme__: any
+  const __service_worker_url_base: string
 
   interface Window {
     programs: any

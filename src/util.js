@@ -10,19 +10,22 @@ export const programsUri = envYear <= 2025 ?
 export const roomNamesByFloors = [
   ['1F', ['RB105', 'RB101', 'RB102', 'AU']],
   ['2F', ['TR209', 'TR210', 'TR211', 'TR212', 'TR213', 'TR214']],
-  ['3F', ['TR310-2', 'TR311', 'TR313']],
-  ['4F', ['TR409-2', 'TR410', 'TR411', 'TR412-1', 'TR412-2']],
-  ['5F', ['TR510', 'TR511', 'TR512', 'TR513', 'TR514', 'TR515']],
+  ['3F', ['TR310-2', 'TR311', 'TR313', 'Hallway outside TR309']],
+  ['4F', ['TR409-2', 'TR410', 'TR411', 'TR412-1', 'TR412-2', 'Hallway outside TR409']],
+  ['5F', ['TR509', 'TR510', 'TR511', 'TR512', 'TR513', 'TR514', 'TR515']],
 ];
+
+/**
+ * @template T
+ * @type {<T>(x: T) => T} */
+const id = x => x
 
 /**
  * @param {string} data
  * @param {number} year */
 export function parsePrograms(data, year) {
-  if (year <= 2025) {
-    return JSON.parse(data)
-  }
-  return transformNuxtApiPayload(JSON.parse(data))
+  const transform = year <= 2025 ? id : transformNuxtApiPayload
+  return transform(JSON.parse(data))
 }
 
 /** @param {Record<string, unknown>} data */
@@ -72,6 +75,10 @@ class ProgramsBuilder2026 {
   }
 
   dump() {
+    function fixupRoomName(name) {
+      return name.replace(/^Hallway outside (.+)/, '$1 外走廊')
+    }
+
     for (const prog of this.programs) {
       const { speakers, track, room, tags, ...rest } = prog
 
@@ -87,8 +94,8 @@ class ProgramsBuilder2026 {
       })
       const room_ = this.rooms.upsert({
         id: prog.room.en,
-        zh: {name: prog.room.en},
-        en: {name: prog.room.en}
+        zh: {name: fixupRoomName(prog.room.en)},
+        en: {name: prog.room.en},
       })
       const tags_ = prog.tags.map(x => this.tags.upsert(translateTag(x)))
       tags_.push(this.tags.upsert({

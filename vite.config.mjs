@@ -3,7 +3,10 @@ import vue from '@vitejs/plugin-vue2'
 import basicSSL from '@vitejs/plugin-basic-ssl'
 
 export default defineConfig(async ({ mode }) => {
-  return {
+  return /** @type {import('vite').UserConfig} */({
+    define: {
+      __service_worker_url_base: mode === 'development' ? `'/src'` : `''`,
+    },
     build: {
       rollupOptions: {
         input: {
@@ -37,5 +40,5 @@ export default defineConfig(async ({ mode }) => {
     ],
     envPrefix: 'COSCUP_AGENDA_',
     clearScreen: false,
-  }
+  })
 })

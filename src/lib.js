@@ -115,8 +115,19 @@ export function updateTracks(programs) {
 
   const sortedRoomIds = roomIdsByFloors.map(([, snd]) => snd).flat()
 
-  const sortedTracksWithTalks = tracksWithTalks.sort((a, b) =>
-    (sortedRoomIds.indexOf(a.roomId) - sortedRoomIds.indexOf(b.roomId)));
+  const strayRoomIds = Array.from(new Set(tracksWithTalks.map(x => x.roomId)).difference(new Set(sortedRoomIds)))
+
+  if (strayRoomIds.length) {
+    console.warn('Found stray room ids', strayRoomIds)
+  }
+
+  const sortedTracksWithTalks = tracksWithTalks.sort((a, b) => {
+    let aa = sortedRoomIds.indexOf(a.roomId)
+    let bb = sortedRoomIds.indexOf(b.roomId)
+    if (aa < 0) aa = 1e9
+    if (bb < 0) bb = 1e9
+    return aa - bb || a.roomId.localeCompare(b)
+  })
 
   const speakersById = Object.fromEntries(programs.speakers.map(sp => [sp.id, sp]));
 

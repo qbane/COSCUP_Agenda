@@ -35,8 +35,9 @@ sw.addEventListener('fetch', evt => {
       console.log(`Fetching [${evt.request.url}] from remote`);
       const remoteResp = await fetch(evt.request)
       const url = new URL(evt.request.url)
-      if (url.hostname.match(/cdnjs/i))
+      if (url.hostname.match(/cdnjs\.cloudflare\.com|pretalx\.coscup\.org/i)) {
         cache.put(evt.request, remoteResp.clone());
+      }
       return remoteResp;
     }));
 });

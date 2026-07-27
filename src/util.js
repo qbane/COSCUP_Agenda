@@ -34,14 +34,23 @@ function transformNuxtApiPayload(data) {
 }
 
 function translateTag(key) {
+  // strangely, all other languages are categorized into "others"
+  // see: https://github.com/COSCUP/2026/blob/ad916a25a4539fd01393ad515d98bae63be42ecf/shared/utils/session.ts
+  const langMapping = {
+    'Mandarin': '漢語',
+    'English': '英語',
+    'others': '其他語言',
+  }
   const mapping = {
     'Elementary': '入門',
     'Intermediate': '中階',
     'Advanced': '進階',
+    ...langMapping,
   }
+  const id = Object.hasOwnProperty.call(langMapping, key) ? 'language_' + key : key
   const name = mapping[key] ?? key
   return {
-    id: key,
+    id,
     zh: {name},
     en: {name},
   }

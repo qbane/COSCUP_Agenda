@@ -19,18 +19,6 @@ export function timeMachineStop() {
   updateTracks(window.programs);
 }
 
-const predefinedLangs = {
-  Mandarin: '漢語',
-  English: '英語',
-  Japanese: '日語',
-  'Taiwan Taigi': '臺語',
-}
-
-function getLanguageTrans(la) {
-  if (predefinedLangs[la]) return predefinedLangs[la]
-  return la.length > 30 ? la.slice(0, 30) + '...' : la
-}
-
 // this should be put into agendaView ?
 export function updateTracks(programs) {
   let today = moment().format('YYYYMMDD');
@@ -50,23 +38,9 @@ export function updateTracks(programs) {
   const tracksWithTalks = programs.rooms.map(room => {
     const roomId = room.id;
 
-    // not used in 2025
-    // const priorityTags = [
-    //   'mandarin', 'english', 'taiwanese', 'japanese', // langauges
-    //   'beginner', 'skilled', 'advanced', 'workshop', // levels
-    // ];
-
     let allTags = programs.tags.filter(tag => tag.id.trim()); // tags contain a `" "` element...
     allTags = allTags.filter(tag => tag.id.startsWith('language_')).concat(
       allTags.filter(tag => !tag.id.startsWith('language_')))
-
-    // make a pseudo tag if it does not exist
-    function ensureLanguageTag(tagpairs, lang) {
-      if (!tagpairs.some(([id, tag]) => id.startsWith('language_'))) {
-        tagpairs.splice(0, 0, ['', getLanguageTrans(lang)])
-      }
-      return tagpairs.map(([x, y]) => y)
-    }
 
     let firstFuture = true;
     const talks = programs.sessions
@@ -77,11 +51,9 @@ export function updateTracks(programs) {
         endMoment: moment(t.end),
         type: programs.session_types
           .filter(type => type.id == t.type),
-        tags: ensureLanguageTag(
-          allTags
-            .filter(tag => t.tags.indexOf(tag.id) >= 0)
-            .map(tag => [tag.id, tag.zh.name.trim()]),
-          t.language),
+        tags: allTags
+          .filter(tag => t.tags.indexOf(tag.id) >= 0)
+          .map(tag => tag.zh.name.trim()),
       }))
       .filter(t => t.beginMoment.format('YYYYMMDD') == today)
       .sort((a, b) => (a.beginMoment - b.beginMoment))
